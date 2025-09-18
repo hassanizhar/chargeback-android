@@ -1,19 +1,5 @@
 package com.example.chargeback.ui.theme.components.screens
 
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.TopAppBar
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import com.example.chargeback.data.model.AppName
-import com.example.chargeback.data.model.Category
-import com.example.chargeback.data.model.Frequency
-import com.example.chargeback.data.model.Reminder
-import com.example.chargeback.viewmodel.EditSubscriptionViewModel
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -23,25 +9,37 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Switch
+import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import com.example.chargeback.ui.theme.TextLight
+import com.example.chargeback.data.model.AppName
+import com.example.chargeback.data.model.Category
+import com.example.chargeback.data.model.Frequency
+import com.example.chargeback.data.model.Reminder
 import com.example.chargeback.ui.theme.components.SubscriptionCardView
+import com.example.chargeback.ui.theme.components.common.CustomRow
+import com.example.chargeback.ui.theme.components.common.CustomTopBar
 import com.example.chargeback.ui.theme.components.pickers.amountPicker.AmountPickerSheet
 import com.example.chargeback.ui.theme.components.pickers.appPicker.AppPickerSheet
 import com.example.chargeback.ui.theme.components.pickers.categoryPicker.CategoryPickerSheet
@@ -53,7 +51,8 @@ import com.example.chargeback.ui.theme.components.sections.categorySection.Categ
 import com.example.chargeback.ui.theme.components.sections.dateSection.DateSection
 import com.example.chargeback.ui.theme.components.sections.frequencySection.FrequencySection
 import com.example.chargeback.ui.theme.components.sections.reminderSection.ReminderSection
-import java.time.LocalDate
+import com.example.chargeback.viewmodel.EditSubscriptionViewModel
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -74,24 +73,16 @@ fun EditSubscriptionScreen(
     val allFrequencies = Frequency.entries
     val allReminders = Reminder.entries
 
+    val snackbarHostState = remember { SnackbarHostState() }
+    val scope = rememberCoroutineScope()
+
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = { Text("Edit Subscription") },
-                navigationIcon = {
-                    IconButton(onClick = onDismiss) {
-                        val context = LocalContext.current
-                        val res = context.resources.getIdentifier("back_button", "drawable", context.packageName)
-                        if (res != 0) Icon(painterResource(id = res), contentDescription = "Back")
-                    }
-                },
-                actions = {
-                    TextButton(onClick = {
-                        viewModel.save()
-                        onDismiss()
-                    }) {
-                        Text("Save", color = Color(0xFF007AFF)) // AppBlue
-                    }
+            CustomTopBar(
+                onDismiss = onDismiss,
+                onSave = {
+                    viewModel.save()
+                    onDismiss()
                 }
             )
         },
@@ -128,26 +119,46 @@ fun EditSubscriptionScreen(
                     .padding(16.dp),
                 verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
-                DateSection(subscription.startDate) { newDate -> viewModel.updateStartDate(newDate as LocalDate) }
+                DateSection(subscription.startDate, onDateClick = {
+                    scope.launch {
+                        snackbarHostState.showSnackbar(
+                            message = "Saved successfully!",
+                            withDismissAction = true // optional “x”
+                        )
+                    }
+                })
                 FrequencySection(subscription.frequency) { showFrequencySheet = true }
                 ReminderSection(subscription.remindMe) { showReminderSheet = true }
 
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier.fillMaxWidth()
-                        .padding(horizontal = 8.dp, vertical = 0.dp)
-                ) {
-                    Text(
-                        "Active",
-                        color = TextLight,
-                        style = MaterialTheme.typography.bodyMedium
-                    )
-                    Spacer(modifier = Modifier.weight(1f))
-                    Switch(
-                        checked = subscription.isActive,
-                        onCheckedChange = { viewModel.updateIsActive(it) }
-                    )
-                }
+
+                CustomRow(
+                    label = "Active",
+                    onClick = null,
+                    showDivider = false,
+                    valueContent = {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(4.dp)
+                        ) {
+                            Switch(
+                                checked = subscription.isActive,
+                                onCheckedChange = { viewModel.updateIsActive(it) },
+                                colors = SwitchDefaults.colors(
+                                    checkedThumbColor = Color.White,
+                                    checkedTrackColor = Color.Green,
+                                    uncheckedThumbColor = Color.White,
+                                    uncheckedTrackColor = Color.LightGray,
+                                    checkedBorderColor = Color.Transparent,
+                                    uncheckedBorderColor = Color.Transparent,
+                                    uncheckedIconColor = Color.Gray,
+                                    checkedIconColor = Color.White
+                                )
+
+                            )
+                            Spacer(modifier = Modifier.width(4.dp))
+                        }
+                    }
+                )
             }
 
             // Delete button

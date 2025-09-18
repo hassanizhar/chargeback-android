@@ -23,6 +23,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import com.example.chargeback.R
 import com.example.chargeback.data.model.Category
 import com.example.chargeback.ui.theme.components.common.CustomDivider
 
@@ -40,11 +41,6 @@ fun CategoryPickerItem(
                 .padding(horizontal = 16.dp, vertical = 8.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            // Category icon with circle background
-            val context = LocalContext.current
-            val iconRes = remember(category.imageName) {
-                context.resources.getIdentifier(category.imageName, "drawable", context.packageName)
-            }
             Box(
                 modifier = Modifier
                     .size(46.dp) // 30 icon + 8 padding each side
@@ -54,13 +50,11 @@ fun CategoryPickerItem(
                     ),
                 contentAlignment = Alignment.Center
             ) {
-                if (iconRes != 0) {
-                    Image(
-                        painter = painterResource(id = iconRes),
-                        contentDescription = category.displayName,
-                        modifier = Modifier.size(30.dp)
-                    )
-                }
+                Image(
+                    painter = painterResource(id = category.imageResourceId),
+                    contentDescription = category.displayName,
+                    modifier = Modifier.size(30.dp)
+                )
             }
 
             Spacer(modifier = Modifier.width(10.dp))
@@ -75,16 +69,11 @@ fun CategoryPickerItem(
 
             // Checkmark
             if (category == selectedCategory) {
-                val checkRes = remember {
-                    context.resources.getIdentifier("check_circle", "drawable", context.packageName)
-                }
-                if (checkRes != 0) {
-                    Icon(
-                        painter = painterResource(id = checkRes),
-                        contentDescription = "Selected",
-                        tint = MaterialTheme.colorScheme.primary
-                    )
-                }
+                Icon(
+                    painter = painterResource(id = R.drawable.check_circle),
+                    contentDescription = "Selected",
+                    tint = MaterialTheme.colorScheme.primary
+                )
             }
         }
 

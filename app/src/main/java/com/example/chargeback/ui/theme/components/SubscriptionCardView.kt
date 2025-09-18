@@ -18,13 +18,11 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.example.chargeback.data.model.Subscription
@@ -34,10 +32,6 @@ import com.example.chargeback.ui.theme.TextLight
 
 @Composable
 fun SubscriptionCardView(subscription: Subscription) {
-    val context = LocalContext.current
-    val appIconRes = remember {
-        context.resources.getIdentifier(subscription.appName.imageName, "drawable", context.packageName)
-    }
 
     Box(
         modifier = Modifier
@@ -62,16 +56,14 @@ fun SubscriptionCardView(subscription: Subscription) {
         ) {
             Spacer(modifier = Modifier.width(20.dp)) // <-- leading padding
 
-            if (appIconRes != 0) {
-                Image(
-                    painter = painterResource(id = appIconRes),
-                    contentDescription = subscription.appName.displayName,
-                    modifier = Modifier
-                        .size(50.dp)
-                        .clip(RoundedCornerShape(25.dp)),
-                    contentScale = ContentScale.FillBounds
-                )
-            }
+            Image(
+                painter = painterResource(id = subscription.appName.imageResourceId),
+                contentDescription = subscription.appName.displayName,
+                modifier = Modifier
+                    .size(50.dp)
+                    .clip(RoundedCornerShape(25.dp)),
+                contentScale = ContentScale.FillBounds
+            )
 
             Spacer(modifier = Modifier.width(16.dp))
 

@@ -1,13 +1,15 @@
 package com.example.chargeback.data.model
 
-enum class AppName(val displayName: String, val imageName: String) {
-    NETFLIX("Netflix", "netflix"),
-    AMAZON_PRIME("Amazon Prime", "prime"),
-    OSN_PLUS("OSN+", "osn"),
-    YOUTUBE("YouTube", "youtube"),
-    OOREDOO("Ooredoo", "ooredoo");
+import androidx.annotation.DrawableRes
+import com.example.chargeback.R
 
-    companion object {
-        val all = entries // or values() on older Kotlin versions
-    }
+enum class AppName(
+    val displayName: String,
+    @DrawableRes val imageResourceId: Int
+) {
+    NETFLIX("Netflix", R.drawable.netflix),
+    AMAZON_PRIME("Amazon Prime", R.drawable.prime),
+    OSN_PLUS("OSN+", R.drawable.osn),
+    YOUTUBE("YouTube", R.drawable.youtube),
+    OOREDOO("Ooredoo", R.drawable.ooredoo);
 }
