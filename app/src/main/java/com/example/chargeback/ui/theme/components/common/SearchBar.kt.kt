@@ -11,13 +11,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.example.chargeback.R
@@ -48,18 +48,20 @@ fun SearchBar(
 
         Spacer(modifier = Modifier.width(8.dp))
 
-        TextField(
+        OutlinedTextField(
             value = searchText,
             onValueChange = onSearchTextChanged,
             placeholder = { Text("Search") },
             singleLine = true,
             modifier = Modifier.fillMaxWidth(),
-//            colors = TextFieldDefaults.textFieldColors(
-//                containerColor = Color.White,
-//                focusedIndicatorColor = Color.Transparent,
-//                unfocusedIndicatorColor = Color.Transparent,
-//                disabledIndicatorColor = Color.Transparent
-//            )
+            colors = TextFieldDefaults.colors(
+                focusedTextColor = Color.Black,
+                focusedIndicatorColor = Color.Transparent,
+                unfocusedIndicatorColor = Color.Transparent,
+                disabledIndicatorColor = Color.Transparent,
+                unfocusedContainerColor = Color.Transparent,
+                focusedContainerColor = Color.Transparent
+            )
         )
     }
 }

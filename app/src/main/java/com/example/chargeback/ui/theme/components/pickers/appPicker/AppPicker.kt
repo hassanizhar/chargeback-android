@@ -15,8 +15,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.example.chargeback.data.model.AppName
+import com.example.chargeback.ui.theme.ScreenBackgroundColor
 import com.example.chargeback.ui.theme.components.common.PickerHeader
 import com.example.chargeback.ui.theme.components.common.SearchBar
 
@@ -37,7 +39,8 @@ fun AppPickerSheet(
 
     ModalBottomSheet(
         onDismissRequest = onDismissRequest,
-        sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = false)
+        sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = false),
+        containerColor = Color.White,
     ) {
         Column(
             modifier = Modifier

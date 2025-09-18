@@ -17,10 +17,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.example.chargeback.R
 import com.example.chargeback.data.model.AppName
+import com.example.chargeback.ui.theme.TextDark
 import com.example.chargeback.ui.theme.components.common.CustomDivider
 
 @Composable
@@ -49,7 +51,7 @@ fun AppPickerItem(
 
             Text(
                 text = app.displayName,
-                color = MaterialTheme.colorScheme.onSurface,
+                color = TextDark,
                 style = MaterialTheme.typography.bodyLarge
             )
 
@@ -62,7 +64,7 @@ fun AppPickerItem(
                         id = R.drawable.check_circle
                     ),
                     contentDescription = "Selected",
-                    tint = MaterialTheme.colorScheme.primary
+                    tint = Color.Unspecified
                 )
             }
         }

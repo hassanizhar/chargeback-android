@@ -25,6 +25,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.example.chargeback.R
 import com.example.chargeback.data.model.Category
+import com.example.chargeback.ui.theme.IconBackgroundColor
+import com.example.chargeback.ui.theme.TextDark
 import com.example.chargeback.ui.theme.components.common.CustomDivider
 
 @Composable
@@ -43,9 +45,9 @@ fun CategoryPickerItem(
         ) {
             Box(
                 modifier = Modifier
-                    .size(46.dp) // 30 icon + 8 padding each side
+                    .size(46.dp)
                     .background(
-                        color = Color(0xFFF0F0F0), // Replace with your Color("IconBackground")
+                        color = IconBackgroundColor,
                         shape = CircleShape
                     ),
                 contentAlignment = Alignment.Center
@@ -61,7 +63,7 @@ fun CategoryPickerItem(
 
             Text(
                 text = category.displayName,
-                color = MaterialTheme.colorScheme.onSurface,
+                color = TextDark,
                 style = MaterialTheme.typography.bodyLarge
             )
 

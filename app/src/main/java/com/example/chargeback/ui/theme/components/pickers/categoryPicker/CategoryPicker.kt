@@ -11,6 +11,7 @@ import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.example.chargeback.data.model.Category
 import com.example.chargeback.ui.theme.components.common.PickerHeader
@@ -28,7 +29,8 @@ fun CategoryPickerSheet(
 
     ModalBottomSheet(
         onDismissRequest = onDismissRequest,
-        sheetState = sheetState
+        sheetState = sheetState,
+        containerColor = Color.White,
     ) {
         Column(
             modifier = Modifier

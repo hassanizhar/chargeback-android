@@ -10,13 +10,14 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import com.example.chargeback.R
 import com.example.chargeback.data.model.Frequency
+import com.example.chargeback.ui.theme.TextDark
 import com.example.chargeback.ui.theme.components.common.CustomDivider
 
 @Composable
@@ -30,12 +31,12 @@ fun FrequencyPickerItem(
             modifier = Modifier
                 .fillMaxWidth()
                 .clickable { onFrequencySelected(frequency) }
-                .padding(horizontal = 16.dp, vertical = 8.dp),
+                .padding(horizontal = 16.dp, vertical = 16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = frequency.displayName, // or frequency.name if you use enum class
-                color = MaterialTheme.colorScheme.onSurface,
+                text = frequency.displayName,
+                color = TextDark,
                 style = MaterialTheme.typography.bodyLarge,
                 modifier = Modifier.padding(start = 10.dp)
             )
@@ -44,19 +45,21 @@ fun FrequencyPickerItem(
 
             // Checkmark
             if (frequency == selectedFrequency) {
-                val context = LocalContext.current
-                val checkRes = remember {
-                    context.resources.getIdentifier("check_circle", "drawable", context.packageName)
-                }
-                if (checkRes != 0) {
-                    Icon(
-                        painter = painterResource(id = checkRes),
-                        contentDescription = "Selected",
-                        tint = MaterialTheme.colorScheme.primary
-                    )
-                }
+                Icon(
+                    painter = painterResource(id = R.drawable.check_circle),
+                    contentDescription = "Selected",
+                    tint = Color.Unspecified
+                )
             }
         }
-        CustomDivider()
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp, vertical = 0.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            CustomDivider()
+        }
+
     }
 }

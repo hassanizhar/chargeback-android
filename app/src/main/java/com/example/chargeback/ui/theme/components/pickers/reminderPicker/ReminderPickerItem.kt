@@ -13,10 +13,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import com.example.chargeback.R
 import com.example.chargeback.data.model.Reminder
+import com.example.chargeback.ui.theme.TextDark
 import com.example.chargeback.ui.theme.components.common.CustomDivider
 
 @Composable
@@ -30,12 +33,12 @@ fun ReminderPickerItem(
             modifier = Modifier
                 .fillMaxWidth()
                 .clickable { onReminderSelected(reminder) }
-                .padding(horizontal = 16.dp, vertical = 8.dp),
+                .padding(horizontal = 16.dp, vertical = 16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
                 text = reminder.displayName, // or reminder.name
-                color = MaterialTheme.colorScheme.onSurface,
+                color = TextDark,
                 style = MaterialTheme.typography.bodyLarge,
                 modifier = Modifier.padding(start = 10.dp)
             )
@@ -44,20 +47,21 @@ fun ReminderPickerItem(
 
             // Checkmark
             if (reminder == selectedReminder) {
-                val context = LocalContext.current
-                val checkRes = remember {
-                    context.resources.getIdentifier("check_circle", "drawable", context.packageName)
-                }
-                if (checkRes != 0) {
                     Icon(
-                        painter = painterResource(id = checkRes),
+                        painter = painterResource(id = R.drawable.check_circle),
                         contentDescription = "Selected",
-                        tint = MaterialTheme.colorScheme.primary
+                        tint = Color.Unspecified
                     )
-                }
+
             }
         }
-
-        CustomDivider()
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp, vertical = 0.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            CustomDivider()
+        }
     }
 }
