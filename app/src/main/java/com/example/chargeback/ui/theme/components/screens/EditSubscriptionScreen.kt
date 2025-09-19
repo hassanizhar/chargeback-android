@@ -54,6 +54,14 @@ import com.example.chargeback.ui.theme.components.sections.reminderSection.Remin
 import com.example.chargeback.viewmodel.EditSubscriptionViewModel
 import kotlinx.coroutines.launch
 
+import androidx.compose.material3.*
+import androidx.compose.material3.rememberDatePickerState
+import java.text.SimpleDateFormat
+import java.time.Instant
+import java.time.LocalDate
+import java.time.ZoneId
+import java.util.*
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EditSubscriptionScreen(
@@ -73,8 +81,8 @@ fun EditSubscriptionScreen(
     val allFrequencies = Frequency.entries
     val allReminders = Reminder.entries
 
-    val snackbarHostState = remember { SnackbarHostState() }
-    val scope = rememberCoroutineScope()
+    var showDatePickerDialog by remember { mutableStateOf(false) }
+    val datePickerState = rememberDatePickerState()
 
     Scaffold(
         topBar = {
@@ -120,12 +128,7 @@ fun EditSubscriptionScreen(
                 verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
                 DateSection(subscription.startDate, onDateClick = {
-                    scope.launch {
-                        snackbarHostState.showSnackbar(
-                            message = "Saved successfully!",
-                            withDismissAction = true // optional “x”
-                        )
-                    }
+                    showDatePickerDialog = true
                 })
                 FrequencySection(subscription.frequency) { showFrequencySheet = true }
                 ReminderSection(subscription.remindMe) { showReminderSheet = true }
@@ -239,6 +242,33 @@ fun EditSubscriptionScreen(
                 },
                 onDismissRequest = { showReminderSheet = false }
             )
+        }
+
+        if (showDatePickerDialog) {
+            DatePickerDialog(
+                onDismissRequest = { showDatePickerDialog = false },
+                confirmButton = {
+                    TextButton(onClick = {
+                        // when user clicks OK, update the viewmodel
+                        datePickerState.selectedDateMillis?.let { millis ->
+                            val localDate = Instant.ofEpochMilli(millis)
+                                .atZone(ZoneId.systemDefault())
+                                .toLocalDate()
+                            viewModel.updateStartDate(localDate) // pass LocalDate now
+                        }
+                        showDatePickerDialog = false
+                    }) {
+                        Text("OK")
+                    }
+                },
+                dismissButton = {
+                    TextButton(onClick = { showDatePickerDialog = false }) {
+                        Text("Cancel")
+                    }
+                }
+            ) {
+                DatePicker(state = datePickerState)
+            }
         }
     }
 }
